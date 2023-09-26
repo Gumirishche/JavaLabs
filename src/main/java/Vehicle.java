@@ -1,7 +1,14 @@
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
 
 public class Vehicle {
+    private class Model {
+        String name;
+        double price;
+    }
+
     private String brand;
     private Model[] models;
 
@@ -18,26 +25,6 @@ public class Vehicle {
         this.brand = brand;
     }
 
-    public class Model {
-        private String name;
-        private double price;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
-    }
 
     public void modifyModels(Model[] models) {
         this.models = models;
@@ -83,36 +70,40 @@ public class Vehicle {
     }
 
     public Model[] addModel(Model model) {
-        models = Arrays.copyOf(models, models.length+1);
-        models[models.length-1] = model;
+        models = Arrays.copyOf(models, models.length + 1);
+        models[models.length - 1] = model;
         return models;
     }
 
     public void removeModel(String name, double price) {
-        Model[] newModels = new Model[models.length-1];
+        Model[] newModels = new Model[models.length - 1];
         int i = 0;
         while (!Objects.equals(models[i].name, name) || !Objects.equals(models[i].price, price)) {
             i++;
         }
-        System.arraycopy(models,0,newModels,0,i);
-        System.arraycopy(models,i+1,newModels,i,models.length-i-1);
-        models=newModels;
+        System.arraycopy(models, 0, newModels, 0, i);
+        System.arraycopy(models, i + 1, newModels, i, models.length - i - 1);
+        models = newModels;
     }
 
 
     public static void main(String[] args) {
-        int[] i = {1, 2, 3, 4, 5, 6};
-        int[] j = new int[5];
-        j = Arrays.copyOf(i,i.length+1);
-        j[j.length-1] = 1;
-//        System.arraycopy(i, 0, j, 0, 3);
-//        System.arraycopy(i, 4, j, 3, i.length-3-1);
-//        j = Arrays.copyOf(j, 7);
-        for (int l : j
-        ) {
-//            if (!Objects.equals(i[2], l)) {
-                System.out.println(l);
-//            }
-        }
+//        int[] i = {1, 2, 3, 4, 5, 6};
+//        int[] j = new int[5];
+//        j = Arrays.copyOf(i, i.length + 1);
+//        j[j.length - 1] = 1;
+////        System.arraycopy(i, 0, j, 0, 3);
+////        System.arraycopy(i, 4, j, 3, i.length-3-1);
+////        j = Arrays.copyOf(j, 7);
+//        for (int l : j
+//        ) {
+////            if (!Objects.equals(i[2], l)) {
+//            System.out.println(l);
+////            }
+//        }
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("ddMMyyyyhhmm");
+        long s = Long.parseLong(format.format(date));
+        System.out.println(s);
     }
 }
