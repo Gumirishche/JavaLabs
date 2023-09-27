@@ -7,7 +7,7 @@ import exceptions.NoSuchModelNameException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Bike {
+public class Bike implements Transport{
     private class Model {
         String name;
         double price;
@@ -73,7 +73,7 @@ public class Bike {
         this.lastModified = Long.parseLong(format.format(new Date()));
     }
 
-    public String[] getNames() {
+    public String[] allNames() {
         Model newModel = head;
         String[] names = new String[size];
         names[0] = newModel.name;
@@ -84,7 +84,7 @@ public class Bike {
         return names;
     }
 
-    public double[] getPrice() {
+    public double[] allPrices() {
         Model newModel = head;
         double[] prices = new double[size];
         prices[0] = newModel.price;
@@ -170,17 +170,16 @@ public class Bike {
         this.lastModified = Long.parseLong(format.format(new Date()));
     }
 
-    public long getDateOfChange() {
+    public void getDateOfChange() {
         System.out.println(lastModified);
-        return lastModified;
     }
 
     public static void main(String[] args) throws NoSuchModelNameException, InterruptedException, DuplicateModelNameException {
         Bike bike = new Bike(4);
-        String[] names1 = bike.getNames();
+        String[] names1 = bike.allNames();
         bike.getDateOfChange();
         bike.addModel("RZ", 1800000);
-        String[] names2 = bike.getNames();
+        String[] names2 = bike.allNames();
         bike.getDateOfChange();
         for (String name : names1
         ) {

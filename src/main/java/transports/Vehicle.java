@@ -7,7 +7,7 @@ import exceptions.NoSuchModelNameException;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Vehicle {
+public class Vehicle implements Transport{
     private class Model {
         String name;
         double price;
@@ -73,7 +73,7 @@ public class Vehicle {
         throw new NoSuchModelNameException("Модели с таким именем: " + name + " не существует");
     }
 
-    public void modifyModelName(String oldName, String newName) throws NoSuchModelNameException, DuplicateModelNameException {
+    public void modifyName(String oldName, String newName) throws NoSuchModelNameException, DuplicateModelNameException {
         boolean flag = false;
         for (Model m : models
         ) {
