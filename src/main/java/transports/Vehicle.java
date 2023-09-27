@@ -168,6 +168,9 @@ public class Vehicle implements Transport{
         for (int i = 0; i < vehicle.allNames().length; i++) {
             System.out.println(names[i] + " : " + prices[i]);
         }
+        System.out.println("Среднее арифметическое: "+Transports.arifMidl(vehicle));
+        Transports.allNames(vehicle);
+        Transports.allPrices(vehicle);
 //        vehicle.modifyPrice("RC",12345);
 //        System.out.println(vehicle.priceOfModel("RC"));
     }
