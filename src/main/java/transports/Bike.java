@@ -1,8 +1,14 @@
+package transports;
+
+import exceptions.DuplicateModelNameException;
+import exceptions.ModelPriceOutOfBoundsException;
+import exceptions.NoSuchModelNameException;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Bike {
-    private static class Model {
+    private class Model {
         String name;
         double price;
         Model next;
@@ -45,7 +51,18 @@ public class Bike {
         this.brand = brand;
     }
 
-    public void addModel(Model model) {
+    public void addModel(String name, double price) throws DuplicateModelNameException {
+        if (price < 0) {
+            throw new ModelPriceOutOfBoundsException("Цена не может быть меньше 0");
+        }
+        Model model1 = head.next;
+        while ((model1).equals(head)) {
+            if ((model1.name).equals(name)) {
+                throw new DuplicateModelNameException("Модель с названием: " + name + " уже есть");
+            }
+            model1 = model1.next;
+        }
+        Model model = new Model(name, price);
         head.prev.next = model;
         Model preModel = head.prev;
         head.prev = model;
@@ -78,52 +95,91 @@ public class Bike {
         return prices;
     }
 
-    public double priceOfModel(String name) {
+    public double priceOfModel(String name) throws NoSuchModelNameException {
         Model model = head;
         for (int i = 0; i < size; i++) {
             if ((model.name).equals(name)) {
-                break;
+                return model.price;
             }
             model = model.next;
         }
-        return model.price;
+        throw new NoSuchModelNameException("Модели с таким именем: " + name + " не существует");
     }
 
-    public void modifyPrice(String name, double price) {
+    public void modifyName(String oldName, String newName) throws NoSuchModelNameException, DuplicateModelNameException {
+        boolean flag = false;
+        Model model1 = head.next;
+        while ((model1).equals(head)) {
+            if ((model1.name).equals(newName)) {
+                throw new DuplicateModelNameException("Модель с названием: " + newName + " уже есть");
+            }
+            model1 = model1.next;
+        }
+        Model newModel = head;
+        for (int i = 0; i < size; i++) {
+            if ((newModel.name).equals(oldName)) {
+                newModel.name = newName;
+                flag = true;
+                break;
+            }
+            newModel = newModel.next;
+        }
+        if (!flag) {
+            throw new NoSuchModelNameException("Модели с таким именем: " + oldName + " не существует");
+        }
+        SimpleDateFormat format = new SimpleDateFormat("ddMMyyyyhhmmss");
+        this.lastModified = Long.parseLong(format.format(new Date()));
+    }
+
+    public void modifyPrice(String name, double price) throws NoSuchModelNameException {
+        if (price < 0) {
+            throw new ModelPriceOutOfBoundsException("Цена не может быть меньше 0");
+        }
+        boolean flag = false;
         Model newModel = head;
         for (int i = 0; i < size; i++) {
             if ((newModel.name).equals(name)) {
                 newModel.price = price;
+                flag = true;
+                break;
             }
             newModel = newModel.next;
         }
-        SimpleDateFormat format = new SimpleDateFormat("ddMMyyyyhhmmss");
-        this.lastModified = Long.parseLong(format.format(new Date()));
-    }
-
-    public void removeModel(String name, double price) {
-        Model reModel = head.next;
-        for (int i = 1; i < size; i++) {
-            if ((reModel.name).equals(name) && reModel.price == price) {
-                reModel.prev.next = reModel.next;
-                reModel.next.prev = reModel.prev;
-            }
+        if (!flag) {
+            throw new NoSuchModelNameException("Модели с таким именем: " + name + " не существует");
         }
         SimpleDateFormat format = new SimpleDateFormat("ddMMyyyyhhmmss");
         this.lastModified = Long.parseLong(format.format(new Date()));
     }
 
-    public long getDateOfChange(){
+    public void removeModel(String name) throws NoSuchModelNameException {
+        Model reModel = head.next;
+        boolean flag = false;
+        for (int i = 1; i < size; i++) {
+            if ((reModel.name).equals(name)) {
+                reModel.prev.next = reModel.next;
+                reModel.next.prev = reModel.prev;
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            throw new NoSuchModelNameException("Модели с таким именем: " + name + " не существует");
+        }
+        SimpleDateFormat format = new SimpleDateFormat("ddMMyyyyhhmmss");
+        this.lastModified = Long.parseLong(format.format(new Date()));
+    }
+
+    public long getDateOfChange() {
         System.out.println(lastModified);
         return lastModified;
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws NoSuchModelNameException, InterruptedException, DuplicateModelNameException {
         Bike bike = new Bike(4);
         String[] names1 = bike.getNames();
         bike.getDateOfChange();
-        Model model = new Model("RZ", 1800000);
-        bike.addModel(model);
+        bike.addModel("RZ", 1800000);
         String[] names2 = bike.getNames();
         bike.getDateOfChange();
         for (String name : names1
