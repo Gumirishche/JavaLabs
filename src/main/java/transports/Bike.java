@@ -21,7 +21,7 @@ public class Bike implements Transport{
     }
 
     private String brand;
-    private int size = 1;
+    private int size;
     private final Model head = new Model("CZ", 2800000);
 
     {
@@ -33,11 +33,14 @@ public class Bike implements Transport{
 
     public Bike(int size) {
         this.size = size;
+        Model prev;
         for (int i = 1; i < size; i++) {
             Model newModel = new Model("CZ" + i, 1000000 + i * 1000);
             head.prev.next = newModel;
+            prev = head.prev;
             head.prev = newModel;
             head.prev.next = head;
+            head.prev.prev = prev;
         }
         SimpleDateFormat format = new SimpleDateFormat("ddMMyyyyhhmmss");
         this.lastModified = Long.parseLong(format.format(new Date()));
